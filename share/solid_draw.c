@@ -891,6 +891,24 @@ void r_apply_mtrl(struct s_rend *rend, int mi)
     if (mp->h != mq->h)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mp->base.h);
 
+#ifdef __GAMEKID__
+    /* entaviv driver fails on fixed function lighting -
+        just calculate the ambient color and apply it as
+        a vertex color */
+    if (mp->a != mq->a && !rend->color_mtrl)
+    {
+        extern GLfloat light_ambient[4];
+        GLfloat ccol[4];
+        for(int i = 0; i < 4; i++)
+        {
+            ccol[i] = mp->base.a[i] * light_ambient[i];
+            if(ccol[i] > 1.0f)
+                ccol[i] = 1.0;
+            glColor4fv(ccol);
+        }
+    }
+#endif
+
     /* Ball shadow. */
 
     if ((mp_flags & M_SHADOWED) ^ (mq_flags & M_SHADOWED))
@@ -1008,6 +1026,9 @@ void r_apply_mtrl(struct s_rend *rend, int mi)
 
     /* Lighting. */
 
+#ifdef __GAMEKID__
+    glDisable(GL_LIGHTING);
+#else
     if ((mp_flags & M_LIT) ^ (mq_flags & M_LIT))
     {
         if (mp_flags & M_LIT)
@@ -1015,6 +1036,7 @@ void r_apply_mtrl(struct s_rend *rend, int mi)
         else
             glDisable(GL_LIGHTING);
     }
+#endif
 
     /* Update current material state. */
 

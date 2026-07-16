@@ -706,7 +706,10 @@ static const struct light default_lights[LIGHT_MAX] = {
     }
 };
 
-static GLfloat      light_ambient[4];
+#ifndef __GAMEKID__
+static
+#endif
+GLfloat      light_ambient[4];
 static struct light lights[LIGHT_MAX];
 
 void light_reset(void)
