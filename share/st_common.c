@@ -495,6 +495,13 @@ struct mode
 };
 
 static const struct mode modes[] = {
+#ifdef __GAMEKID__
+    { 800, 480 },
+    { 600, 360 },
+    { 480, 288 },
+    { 400, 240 },
+    { 320, 192 }
+#else
     { 2560, 1440 },
     { 1920, 1200 },
     { 1920, 1080 },
@@ -511,6 +518,7 @@ static const struct mode modes[] = {
     { 640, 480 },
     { 480, 320 },
     { 320, 240 }
+#endif
 };
 
 enum
