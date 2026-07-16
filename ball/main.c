@@ -664,10 +664,12 @@ static int loop(void)
             break;
 
         default:
+#if ENABLE_FETCH
             if (e.type == FETCH_EVENT)
             {
                 fetch_handle_event(e.user.data1);
             }
+#endif
             break;
         }
     }
